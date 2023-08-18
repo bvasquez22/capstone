@@ -56,23 +56,11 @@ nav {
   
 main {
     background-color: #f1f7ed;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 20px;
     min-height: calc(100vh - 175px);
-    align-items: center;
-}
-  
-.top {
-    display: flex;
-    width: 95vw;
-    justify-content: space-evenly;
-}
-  
-.bottom {
-    display: flex;
-    width: 95vw;
-    justify-content: space-evenly;
 }
   
 .product-img {
@@ -86,8 +74,7 @@ h2 {
   
 .product-card {
     background-color: #91c7b1;
-    height: 500px;
-    width: 400px;
+    padding: 20px;
     color: #f1f7ed;
     display: flex;
     flex-direction: column;
@@ -95,6 +82,7 @@ h2 {
     align-items: center;
     border-radius: 10px;
     margin-top: 25px;
+    text-align: center;
 }
   
 .add-to-cart-btn, #sign-up {
@@ -106,12 +94,12 @@ h2 {
     color: #4a5759;
 }
   
-.cart-btn:hover, #sign-up:hover {
+.add-to-cart-btn:hover, #sign-up:hover {
     box-shadow: 0px 0px 10px #e3d081;
     transform: scale(1.05);
 }
   
-.cart-btn:active, #sign-up:active {
+.add-to-cart-btn:active, #sign-up:active {
     box-shadow: 0px 0px 5px #e3d081;
     transform: scale(1.025);
 }

@@ -9,6 +9,6 @@ const {getProducts} = require('./controller.js')
 app.use(express.json())
 app.use(cors())
 
-app.get('/products)', getProducts)
+app.get('/products', getProducts);
 
 app.listen(SERVER_PORT, () => console.log(`up on ${SERVER_PORT}`))

@@ -1,26 +1,26 @@
-var products = document.querySelector('main');
+const products = document.querySelector('main');
 
-var cartCountText = document.querySelector("#cart-count");
-var counter = 0;
-var footer = document.querySelector("footer");
-var signUpForm = document.querySelector(".email-sign-up");
-var input = document.querySelector("input");
-var signUpBtn = document.querySelector("#sign-up");
-var allNav = document.querySelector("#all");
-var pokemonNav = document.querySelector("#PokemonTCG");
-var fleshAndBloodNav = document.querySelector("#Flesh-and-Blood");
-var magicNav = document.querySelector("#Magic");
-var pokemonSection = document.querySelector(".pokemon");
-var fleshAndBloodSection = document.querySelector(".flesh-and-blood");
-var magicSection = document.querySelector(".magic-the-gathering");
-var cartButtons = document.querySelectorAll(".add-to-cart-btn");
+const cartCountText = document.querySelector("#cart-count");
+const counter = 0;
+const footer = document.querySelector("footer");
+const signUpForm = document.querySelector(".email-sign-up");
+const input = document.querySelector("input");
+const signUpBtn = document.querySelector("#sign-up");
+const allNav = document.querySelector("#all");
+const pokemonNav = document.querySelector("#PokemonTCG");
+const fleshAndBloodNav = document.querySelector("#Flesh-and-Blood");
+const magicNav = document.querySelector("#Magic");
+const pokemonProducts = document.querySelectorAll(".pokemon");
+const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+const magicProducts = document.querySelectorAll(".magic-the-gathering");
+const cartButtons = document.querySelectorAll(".add-to-cart-btn");
 
 const getProducts = () => {
   axios.get('http://localhost:4004/products')
     .then(res => {
       res.data.forEach(product => {
         const productCard = document.createElement('div');
-        productCard.classList.add('product-card');
+        productCard.classList.add('product-card', product.product_category);
         productCard.setAttribute('id', product['product_id']);
         products.appendChild(productCard);
 
@@ -80,34 +80,46 @@ getProducts();
 //   }
 // });
 
-// function displayAll() {
-//   pokemonSection.style.display = "block";
-//   fleshAndBloodSection.style.display = "block";
-//   magicSection.style.display = "block";
-// }
+function displayAll() {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  pokemonProducts.forEach((product) => (product.style.display = "flex"));
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "flex"));
+  magicProducts.forEach((product) => (product.style.display = "flex"));
+}
 
-// function displayPokemon() {
-//   fleshAndBloodSection.style.display = "none";
-//   magicSection.style.display = "none";
-//   pokemonSection.style.display = "block";
-// }
+function displayPokemon() {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "none"));
+  magicProducts.forEach((product) => (product.style.display = "none"));
+  pokemonProducts.forEach((product) => (product.style.display = "flex"));
+}
 
-// function displayFleshAndBlood() {
-//   pokemonSection.style.display = "none";
-//   magicSection.style.display = "none";
-//   fleshAndBloodSection.style.display = "block";
-// }
+function displayFleshAndBlood() {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  pokemonProducts.forEach((product) => (product.style.display = "none"));
+  magicProducts.forEach((product) => (product.style.display = "none"));
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "flex"));
+}
 
-// function displayMagic() {
-//   pokemonSection.style.display = "none";
-//   fleshAndBloodSection.style.display = "none";
-//   magicSection.style.display = "block";
-// }
+function displayMagic() {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  pokemonProducts.forEach((product) => (product.style.display = "none"));
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "none"));
+  magicProducts.forEach((product) => (product.style.display = "flex"));
+}
 
-// allNav.addEventListener("click", displayAll);
+allNav.addEventListener("click", displayAll);
 
-// pokemonNav.addEventListener("click", displayPokemon);
+pokemonNav.addEventListener("click", displayPokemon);
 
-// fleshAndBloodNav.addEventListener("click", displayFleshAndBlood);
+fleshAndBloodNav.addEventListener("click", displayFleshAndBlood);
 
-// magicNav.addEventListener("click", displayMagic);
+magicNav.addEventListener("click", displayMagic);
