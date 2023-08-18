@@ -1,7 +1,7 @@
 const products = document.querySelector('main');
+let cartCount = document.querySelector('#cart-count');
+let cartTotal = document.querySelector('#cart-total');
 
-const cartCountText = document.querySelector("#cart-count");
-const counter = 0;
 const footer = document.querySelector("footer");
 const signUpForm = document.querySelector(".email-sign-up");
 const input = document.querySelector("input");
@@ -14,6 +14,35 @@ const pokemonProducts = document.querySelectorAll(".pokemon");
 const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
 const magicProducts = document.querySelectorAll(".magic-the-gathering");
 const cartButtons = document.querySelectorAll(".add-to-cart-btn");
+
+const getCart = () => {
+  axios.get('http://localhost:4004/cart')
+    .then(res => {
+      if (res.data.cartCount == 1) {
+        cartCount.textContent = `${res.data.cartCount} item`;
+      } else {
+        cartCount.textContent = `${res.data.cartCount} items`;
+      }
+
+      cartTotal.textContent = `$${Number(res.data.cartTotal).toFixed(2)}`;
+    })
+}
+
+const addToCart = (e) => {
+  e.preventDefault()
+
+  let item = {
+    id: e.target.parentNode.id,
+    quantity: 1,
+    price: e.target.parentNode.children[2].textContent,
+  }
+
+  axios.post('http://localhost:4004/products', item)
+    .then((res) => {
+      alert(res.data)
+      getCart()
+    })
+}
 
 const getProducts = () => {
   axios.get('http://localhost:4004/products')
@@ -41,12 +70,14 @@ const getProducts = () => {
         const productBtn = document.createElement('button');
         productBtn.classList.add('add-to-cart-btn');
         productBtn.textContent = 'Add to Cart';
+        productBtn.addEventListener("click", addToCart);
         productCard.appendChild(productBtn);
       })
     })
 }
 
 getProducts();
+getCart();
 
 // cartButtons.forEach(function (btn) {
 //   btn.addEventListener("click", addToCart);
