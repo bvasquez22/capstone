@@ -48,10 +48,15 @@ nav {
     background-color: #91c7b1;
     display: flex;
     justify-content: center;
+    padding-right: 30px;
     color: #f1f7ed;
     height: 50px;
     position: sticky;
     top: 75px;
+}
+
+.cart-text {
+    width: 200px;
 }
   
 main {
