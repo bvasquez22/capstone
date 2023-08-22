@@ -39,4 +39,14 @@ module.exports = {
         res.status(200).send('Item added to cart.');
     },
 
+    signUp: (req, res) => {
+        sequelize.query(`
+            insert into subscribers (name, email)
+            values ('${req.body.name}', '${req.body.email}')
+        `).then(dbRes => {
+            res.status(200).send(dbRes[0])
+        }).catch(err => {
+            console.log(err)
+        })
+    },
 }

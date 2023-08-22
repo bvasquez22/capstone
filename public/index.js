@@ -1,15 +1,17 @@
-const products = document.querySelector('main');
-let cartCount = document.querySelector('#cart-count');
-let cartTotal = document.querySelector('#cart-total');
-
-const footer = document.querySelector("footer");
-const signUpForm = document.querySelector(".email-sign-up");
-const input = document.querySelector("input");
-const signUpBtn = document.querySelector("#sign-up");
 const allNav = document.querySelector("#all");
 const pokemonNav = document.querySelector("#PokemonTCG");
 const fleshAndBloodNav = document.querySelector("#Flesh-and-Blood");
 const magicNav = document.querySelector("#Magic");
+const products = document.querySelector('main');
+let cartCount = document.querySelector('#cart-count');
+let cartTotal = document.querySelector('#cart-total');
+const signUpForm = document.querySelector(".sign-up-form");
+const nameInput = document.querySelector("#name-input");
+const emailInput = document.querySelector('#email-input')
+const signUpBtn = document.querySelector("#sign-up");
+
+
+const footer = document.querySelector("footer");
 const pokemonProducts = document.querySelectorAll(".pokemon");
 const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
 const magicProducts = document.querySelectorAll(".magic-the-gathering");
@@ -76,21 +78,37 @@ const getProducts = () => {
     })
 }
 
+const signUp = (e) => {
+  e.preventDefault()
+
+  const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+  if (nameInput.value == "") {
+    alert('You must enter your name')
+    return
+  }
+
+  if (emailInput.value == "") {
+    alert('You must enter your email')
+    return
+  } else if (!validEmailRegex.test(emailInput.value)) {
+    alert('You must enter a valid email')
+    return
+  }
+
+  let subscriber = {
+    name: nameInput.value,
+    email: emailInput.value,
+  }
+
+  axios.post('http://localhost:4004/subscribers', subscriber)
+    .then(() => {
+      alert('You are subscribed')
+    })
+}
+
 getProducts();
 getCart();
-
-// cartButtons.forEach(function (btn) {
-//   btn.addEventListener("click", addToCart);
-// });
-
-// function addToCart() {
-//   counter += 1;
-//   if (counter === 1) {
-//     cartCountText.textContent = counter + " item";
-//   } else {
-//     cartCountText.textContent = counter + " items";
-//   }
-// }
 
 // function submitHandler() {
 //   if (input.value === "") {
@@ -102,7 +120,7 @@ getCart();
 //   footer.appendChild(confirmationMsg);
 // }
 
-// signUpBtn.addEventListener("click", submitHandler);
+signUpBtn.addEventListener("click", signUp);
 
 // input.addEventListener("keypress", function (event) {
 //   if (event.key === "Enter") {
