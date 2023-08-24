@@ -9,6 +9,7 @@ const signUpForm = document.querySelector(".sign-up-form");
 const nameInput = document.querySelector("#name-input");
 const emailInput = document.querySelector('#email-input')
 const signUpBtn = document.querySelector("#sign-up");
+let subsciberEmailList = [];
 
 
 const footer = document.querySelector("footer");
@@ -48,7 +49,7 @@ const addToCart = (e) => {
 
 const getProducts = () => {
   axios.get('http://localhost:4004/products')
-    .then(res => {
+    .then((res) => {
       res.data.forEach(product => {
         const productCard = document.createElement('div');
         productCard.classList.add('product-card', product.product_category);
@@ -78,7 +79,19 @@ const getProducts = () => {
     })
 }
 
-const signUp = (e) => {
+const getSubscribers = () => {
+  subsciberEmailList = [];
+
+  axios.get('http://localhost:4004/subscribers')
+  .then((res) => {
+    res.data.forEach(subscriber => {
+      subsciberEmailList.push(subscriber.email)
+      return (subsciberEmailList)
+    })
+  })
+}
+
+const subscribe = (e) => {
   e.preventDefault()
 
   const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -96,6 +109,16 @@ const signUp = (e) => {
     return
   }
 
+  getSubscribers()
+  console.log(subsciberEmailList)
+  console.log(emailInput.value)
+  console.log(subsciberEmailList.includes(emailInput.value))
+
+  if (subsciberEmailList.includes(emailInput.value)) {
+    alert('This email is already subscribed')
+    return
+  }
+
   let subscriber = {
     name: nameInput.value,
     email: emailInput.value,
@@ -105,6 +128,9 @@ const signUp = (e) => {
     .then(() => {
       alert('You are subscribed')
     })
+  
+  nameInput.value = ""
+  emailInput.value = ""
 }
 
 getProducts();
@@ -120,7 +146,7 @@ getCart();
 //   footer.appendChild(confirmationMsg);
 // }
 
-signUpBtn.addEventListener("click", signUp);
+signUpBtn.addEventListener("click", subscribe);
 
 // input.addEventListener("keypress", function (event) {
 //   if (event.key === "Enter") {
