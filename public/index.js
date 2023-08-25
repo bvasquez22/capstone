@@ -11,42 +11,6 @@ const emailInput = document.querySelector('#email-input')
 const signUpBtn = document.querySelector("#sign-up");
 let subsciberEmailList = [];
 
-
-const footer = document.querySelector("footer");
-const pokemonProducts = document.querySelectorAll(".pokemon");
-const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
-const magicProducts = document.querySelectorAll(".magic-the-gathering");
-const cartButtons = document.querySelectorAll(".add-to-cart-btn");
-
-const getCart = () => {
-  axios.get('http://localhost:4004/cart')
-    .then(res => {
-      if (res.data.cartCount == 1) {
-        cartCount.textContent = `${res.data.cartCount} item`;
-      } else {
-        cartCount.textContent = `${res.data.cartCount} items`;
-      }
-
-      cartTotal.textContent = `$${Number(res.data.cartTotal).toFixed(2)}`;
-    })
-}
-
-const addToCart = (e) => {
-  e.preventDefault()
-
-  let item = {
-    id: e.target.parentNode.id,
-    quantity: 1,
-    price: e.target.parentNode.children[2].textContent,
-  }
-
-  axios.post('http://localhost:4004/products', item)
-    .then((res) => {
-      alert(res.data)
-      getCart()
-    })
-}
-
 const getProducts = () => {
   axios.get('http://localhost:4004/products')
     .then((res) => {
@@ -79,19 +43,79 @@ const getProducts = () => {
     })
 }
 
-const getSubscribers = () => {
-  subsciberEmailList = [];
-
-  axios.get('http://localhost:4004/subscribers')
-  .then((res) => {
-    res.data.forEach(subscriber => {
-      subsciberEmailList.push(subscriber.email)
-      return (subsciberEmailList)
-    })
-  })
+function displayAll() {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  pokemonProducts.forEach((product) => (product.style.display = "flex"));
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "flex"));
+  magicProducts.forEach((product) => (product.style.display = "flex"));
 }
 
-const subscribe = (e) => {
+const displayPokemon = () => {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "none"));
+  magicProducts.forEach((product) => (product.style.display = "none"));
+  pokemonProducts.forEach((product) => (product.style.display = "flex"));
+}
+
+const displayFleshAndBlood = () => {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  pokemonProducts.forEach((product) => (product.style.display = "none"));
+  magicProducts.forEach((product) => (product.style.display = "none"));
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "flex"));
+}
+
+const displayMagic = () => {
+  const pokemonProducts = document.querySelectorAll(".pokemon");
+  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
+  const magicProducts = document.querySelectorAll(".magic-the-gathering");
+  pokemonProducts.forEach((product) => (product.style.display = "none"));
+  fleshAndBloodProducts.forEach((product) => (product.style.display = "none"));
+  magicProducts.forEach((product) => (product.style.display = "flex"));
+}
+
+const getCart = () => {
+  axios.get('http://localhost:4004/cart')
+    .then(res => {
+      if (res.data.cartCount == 1) {
+        cartCount.textContent = `${res.data.cartCount} item`;
+      } else {
+        cartCount.textContent = `${res.data.cartCount} items`;
+      }
+
+      cartTotal.textContent = `$${Number(res.data.cartTotal).toFixed(2)}`;
+    })
+}
+
+const addToCart = (e) => {
+  e.preventDefault()
+
+  let item = {
+    id: e.target.parentNode.id,
+    quantity: 1,
+    price: e.target.parentNode.children[2].textContent,
+  }
+
+  axios.post('http://localhost:4004/products', item)
+    .then((res) => {
+      alert(res.data)
+      getCart()
+    })
+}
+
+const getSubscribers = async() => {
+
+  const res = await axios.get('http://localhost:4004/subscribers');
+    const subsciberEmailList = res.data.map((subscriber) => subscriber.email);
+      return subsciberEmailList;
+}
+
+const subscribe = async(e) => {
   e.preventDefault()
 
   const validEmailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -109,13 +133,12 @@ const subscribe = (e) => {
     return
   }
 
-  getSubscribers()
-  console.log(subsciberEmailList)
-  console.log(emailInput.value)
-  console.log(subsciberEmailList.includes(emailInput.value))
+  const subsciberEmailList = await getSubscribers();
 
   if (subsciberEmailList.includes(emailInput.value)) {
     alert('This email is already subscribed')
+    nameInput.value = ""
+    emailInput.value = ""
     return
   }
 
@@ -136,65 +159,8 @@ const subscribe = (e) => {
 getProducts();
 getCart();
 
-// function submitHandler() {
-//   if (input.value === "") {
-//     return;
-//   }
-//   var confirmationMsg = document.createElement("p");
-//   confirmationMsg.textContent = "Thank you for signing up " + input.value;
-//   signUpForm.remove();
-//   footer.appendChild(confirmationMsg);
-// }
-
 signUpBtn.addEventListener("click", subscribe);
-
-// input.addEventListener("keypress", function (event) {
-//   if (event.key === "Enter") {
-//     event.preventDefault();
-//     document.querySelector("#sign-up").click();
-//   }
-// });
-
-function displayAll() {
-  const pokemonProducts = document.querySelectorAll(".pokemon");
-  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
-  const magicProducts = document.querySelectorAll(".magic-the-gathering");
-  pokemonProducts.forEach((product) => (product.style.display = "flex"));
-  fleshAndBloodProducts.forEach((product) => (product.style.display = "flex"));
-  magicProducts.forEach((product) => (product.style.display = "flex"));
-}
-
-function displayPokemon() {
-  const pokemonProducts = document.querySelectorAll(".pokemon");
-  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
-  const magicProducts = document.querySelectorAll(".magic-the-gathering");
-  fleshAndBloodProducts.forEach((product) => (product.style.display = "none"));
-  magicProducts.forEach((product) => (product.style.display = "none"));
-  pokemonProducts.forEach((product) => (product.style.display = "flex"));
-}
-
-function displayFleshAndBlood() {
-  const pokemonProducts = document.querySelectorAll(".pokemon");
-  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
-  const magicProducts = document.querySelectorAll(".magic-the-gathering");
-  pokemonProducts.forEach((product) => (product.style.display = "none"));
-  magicProducts.forEach((product) => (product.style.display = "none"));
-  fleshAndBloodProducts.forEach((product) => (product.style.display = "flex"));
-}
-
-function displayMagic() {
-  const pokemonProducts = document.querySelectorAll(".pokemon");
-  const fleshAndBloodProducts = document.querySelectorAll(".flesh-and-blood");
-  const magicProducts = document.querySelectorAll(".magic-the-gathering");
-  pokemonProducts.forEach((product) => (product.style.display = "none"));
-  fleshAndBloodProducts.forEach((product) => (product.style.display = "none"));
-  magicProducts.forEach((product) => (product.style.display = "flex"));
-}
-
 allNav.addEventListener("click", displayAll);
-
 pokemonNav.addEventListener("click", displayPokemon);
-
 fleshAndBloodNav.addEventListener("click", displayFleshAndBlood);
-
 magicNav.addEventListener("click", displayMagic);

@@ -17,7 +17,6 @@ let cart = {
 
 module.exports = {
     getCart: (req, res) => {
-        console.log(cart);
         res.status(200).send(cart);
     },
     
@@ -34,7 +33,6 @@ module.exports = {
     addToCart: (req, res) => {
         cart.cartCount += req.body.quantity;
         cart.cartTotal += parseFloat(req.body.price.replace('$', ''))
-        console.log(cart)
         res.status(200).send('Item added to cart.');
     },
 

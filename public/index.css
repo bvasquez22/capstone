@@ -64,7 +64,7 @@ main {
     display: grid;
     justify-items: center;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    min-height: calc(100vh - 175px);
+    min-height: calc(100vh - 205px);
     padding-bottom: 30px;
 }
   
@@ -79,6 +79,7 @@ h2 {
   
 .product-card {
     background-color: #91c7b1;
+    height: 500px;
     padding: 30px;
     color: #f1f7ed;
     display: flex;
